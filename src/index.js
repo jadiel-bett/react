@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import DrinkList from './App';
+import  {  RecipeList2 } from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <DrinkList />
+    <RecipeList2 />
   </React.StrictMode>
 );
