@@ -1,185 +1,126 @@
-// 8th March 2024
-import { people } from "./data.js";
-import { getImageUrl } from "./utils.js";
-import { recipes } from "./data.js";
+// 11th March 2024
+import { Fragment } from "react";
 
-// Challenge 1: Splitting a list into two
+import Profile from "./Profile.js";
 
-export default function List() {
-  const chemists = people.filter((person) =>
-    person.profession === "chemist" ? person : null
-  );
-  const others = people.filter((person) =>
-    person.profession === "chemist" ? null : person
-  );
-  const chemistItems = chemists.map((person) => {
-    return (
-      <li key={person.id}>
-        <img src={getImageUrl(person)} alt={person.name} />
-        <p>
-          <b>{person.name}:</b>
-          {" " + person.profession + " "}
-          known for {person.accomplishment}
-        </p>
-      </li>
-    );
-  });
-  const otherItems = others.map((person) => {
-    return (
-      <li key={person.id}>
-        <img src={getImageUrl(person)} alt={person.name} />
-        <p>
-          <b>{person.name}:</b>
-          {" " + person.profession + " "}
-          known for {person.accomplishment}
-        </p>
-      </li>
-    );
-  });
+// Challenge 3 on Rendereing lists
+const poem = {
+  lines: [
+    "I write, erase, rewrite",
+    "Erase again, and then",
+    "A poppy blooms.",
+  ],
+};
+
+export function Poem() {
   return (
     <article>
-      <h1>Chemists</h1>
-      <ul>{chemistItems}</ul>
-      <h1>Everyone Else</h1>
-      <ul>{otherItems}</ul>
+      {poem.lines.map((line, index) => (
+        <Fragment key={index}>
+          <p>{line}</p>
+          {index < poem.lines.length - 1 && <hr />}
+        </Fragment>
+      ))}
     </article>
   );
 }
 
-// [ALTERNATIVE SOLUTION 1]
+/// LESSON: KEEPING COMPONENTS PURE
+// Challenge 1: Fix a broken Clock
+// export default function Clock({ time }) {
+//   let hours = time.getHours();
+//   if (hours >= 0 && hours <= 6) {
+//     document.getElementById("time").className = "night";
+//   } else {
+//     document.getElementById("time").className = "day";
+//   }
+//   return <h1 id="time">{time.toLocaleTimeString()}</h1>;
+// }
 
-let chemists = [];
-let everyoneElse = [];
-people.forEach((person) => {
-  if (person.profession === "chemist") {
-    chemists.push(person);
+export function Clock({ time }) {
+  let hours = 0;
+  let className;
+  if (hours >= 0 && hours <= 6) {
+    className = "night";
   } else {
-    everyoneElse.push(person);
+    className = "day";
   }
-});
+  return <h1 className={className}>{time.toLocaleTimeString()}</h1>;
+}
 
-function ListSection({ title, people }) {
+/// Challenge 2: Fix a broken profile
+//
+// Two Profile components are rendered side by side with different data.
+// Press “Collapse” on the first profile, and then “Expand” it.
+// You’ll notice that both profiles now show the same person.
+// This is a bug.
+// Find the cause of the bug and fix it.
+//
+// export default function App() {
+// return (
+//   <>
+//     <Profile person={{
+//       imageId: 'lrWQx8l',
+//       name: 'Subrahmanyan Chandrasekhar',
+//     }} />
+//     <Profile person={{
+//       imageId: 'MK3eW3A',
+//       name: 'Creola Katherine Johnson',
+//     }} />
+//   </>
+// )
+// }
+
+export function App() {
   return (
     <>
-      <h2>{title}</h2>
-      <ul>
-        {people.map((person) => (
-          <li key={person.id}>
-            <img src={getImageUrl(person)} alt={person.name} />
-            <p>
-              <b>{person.name}:</b>
-              {" " + person.profession + " "}
-              known for {person.accomplishment}
-            </p>
-          </li>
-        ))}
-      </ul>
+      <Profile
+        person={{
+          imageId: "lrWQx8l",
+          name: "Subrahmanyan Chandrasekhar",
+        }}
+      />
+      <Profile
+        person={{
+          imageId: "MK3eW3A",
+          name: "Creola Katherine Johnson",
+        }}
+      />
     </>
   );
 }
 
-// export default function List() {
+/// Challenge 3: Fix a broken story tray
+// The CEO of your company is asking you to add “stories” to your online clock
+// app, and you can’t say no. You’ve written a StoryTray component that
+// accepts a list of stories, followed by a “Create Story” placeholder.
+
+// You implemented the “Create Story” placeholder by pushing one more
+// fake story at the end of the stories array that you receive as a prop.
+// But for some reason, “Create Story” appears more than once.
+// Fix the issue.
+// export default function StoryTray({ stories }) {
+//   stories.push({
+//     id: "create",
+//     label: "Create Story",
+//   });
+
 //   return (
-//     <article>
-//       <h1>Scientists</h1>
-//       <ListSection
-//         title="Chemists"
-//         people={chemists}
-//       />
-//       <ListSection
-//         title="Everyone Else"
-//         people={everyoneElse}
-//       />
-//     </article>
+//     <ul>
+//       {stories.map((story) => (
+//         <li key={story.id}>{story.label}</li>
+//       ))}
+//     </ul>
 //   );
 // }
 
-/// [ALTERNATIVE SOLUTION 2]
-
-// function ListSection({ title, people }) {
-//   return (
-//     <>
-//       <h2>{title}</h2>
-//       <ul>
-//         {people.map(person =>
-//           <li key={person.id}>
-//             <img
-//               src={getImageUrl(person)}
-//               alt={person.name}
-//             />
-//             <p>
-//               <b>{person.name}:</b>
-//               {' ' + person.profession + ' '}
-//               known for {person.accomplishment}
-//             </p>
-//           </li>
-//         )}
-//       </ul>
-//     </>
-//   );
-// }
-
-export function List2() {
-  const chemists = people.filter((person) => person.profession === "chemist");
-  const everyoneElse = people.filter(
-    (person) => person.profession !== "chemist"
-  );
+export default function StoryTray({ stories }) {
   return (
-    <article>
-      <h1>Scientists</h1>
-      <ListSection title="Chemists" people={chemists} />
-      <ListSection title="Everyone Else" people={everyoneElse} />
-    </article>
-  );
-}
-
-/// [Challenge 2: Nested lists in one component]
-export function RecipeList() {
-  const recipeItem = recipes.map((recipe) => (
-    <div>
-      <h2>{recipe.name}</h2>
-      <ul>
-        {recipe.ingredients.map((ingredient) => (
-          <li>{ingredient}</li>
-        ))}
-      </ul>
-    </div>
-  ));
-  return (
-    <div>
-      <h1>Recipes</h1>
-      {recipeItem}
-    </div>
-  );
-}
-
-// [Challenge 3: Extracting a list item component]
-
-function Recipe({ id, name, ingredients }) {
-  return (
-    <div key={id}>
-      <h2>{name}</h2>
-      <ul>
-        {ingredients.map((ingredient) => (
-          <li key={ingredient}>{ingredient}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-export function RecipeList2() {
-  return (
-    <div>
-      <h1>Recipes</h1>
-      {recipes.map((recipe) => (
-        <Recipe
-          key={recipe.id}
-          id={recipe.id}
-          name={recipe.name}
-          ingredients={recipe.ingredients}
-        />
+    <ul>
+      {stories.map((story) => (
+        <li key={story.id}>{story.label}</li>
       ))}
-    </div>
+      <li>Create Story</li>
+    </ul>
   );
 }
